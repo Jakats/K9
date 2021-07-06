@@ -23,6 +23,8 @@ ANY player that has an option turned on in their trainers for (All peds ignore) 
 3. ATTACK               | While aiming press Numpad 8
 4. In/OUT Of Vehicle    | Numpad 6
 
+## To-Do List
+1. Create function where K9 searches if player has drugs
 
 ## Edit
 This is rework of Burk's K9 script made to work with QBCore Framework which you can find here https://github.com/qbcore-framework
