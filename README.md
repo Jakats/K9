@@ -25,7 +25,6 @@ ANY player that has an option turned on in their trainers for (All peds ignore) 
 
 ## To-Do List
 1. Create function where K9 searches if player has drugs
-2. Give notification when no car is found for search (remove server side error also)
 
 ## Edit
 This is rework of Burk's K9 script made to work with QBCore Framework which you can find here https://github.com/qbcore-framework
