@@ -159,7 +159,7 @@ AddEventHandler("K9:ToggleFollow", function()
                 SetPedKeepTask(spawned_ped, true)
                 following = true
                 attacking = false
-                QBCore.Functions.Notify(k9_name .. " " .. language.follow, primary, 5000)
+                QBCore.Functions.Notify(k9_name .. " " .. language.follow, "primary", 5000)
             end
         else
             local has_control = false
@@ -171,7 +171,7 @@ AddEventHandler("K9:ToggleFollow", function()
                 ClearPedTasks(spawned_ped)
                 following = false
                 attacking = false
-                QBCore.Functions.Notify(k9_name .. " " .. language.stop, error, 5000)
+                QBCore.Functions.Notify(k9_name .. " " .. language.stop, "error", 5000)
             end
         end
     end
@@ -185,7 +185,7 @@ AddEventHandler("K9:ToggleVehicle", function(isRestricted, vehList)
             SetEntityInvincible(spawned_ped, true)
             SetPedCanRagdoll(spawned_ped, false)
             TaskLeaveVehicle(spawned_ped, GetVehiclePedIsIn(spawned_ped, false), 256)
-            QBCore.Functions.Notify(k9_name .. " " .. language.exit, error, 5000)
+            QBCore.Functions.Notify(k9_name .. " " .. language.exit, "error", 5000)
             Wait(2000)
             SetPedCanRagdoll(spawned_ped, true)
             SetEntityInvincible(spawned_ped, false)
@@ -198,11 +198,11 @@ AddEventHandler("K9:ToggleVehicle", function(isRestricted, vehList)
                     if isRestricted then
                         if CheckVehicleRestriction(vehicle, vehList) then
                             TaskEnterVehicle(spawned_ped, vehicle, -1, door, 2.0, 1, 0)
-                            QBCore.Functions.Notify(k9_name .. " " .. language.enter, success, 5000)
+                            QBCore.Functions.Notify(k9_name .. " " .. language.enter, "success", 5000)
                         end
                     else
                         TaskEnterVehicle(spawned_ped, vehicle, -1, door, 2.0, 1, 0)
-                        QBCore.Functions.Notify(k9_name .. " " .. language.enter, success, 5000)
+                        QBCore.Functions.Notify(k9_name .. " " .. language.enter, "success", 5000)
                     end
                 end
             else
@@ -211,11 +211,11 @@ AddEventHandler("K9:ToggleVehicle", function(isRestricted, vehList)
                 if isRestricted then
                     if CheckVehicleRestriction(vehicle, vehList) then
                         TaskEnterVehicle(spawned_ped, vehicle, -1, door, 2.0, 1, 0)
-                        QBCore.Functions.Notify(k9_name .. " " .. language.enter, success, 5000)
+                        QBCore.Functions.Notify(k9_name .. " " .. language.enter, "success", 5000)
                     end
                 else
                     TaskEnterVehicle(spawned_ped, vehicle, -1, door, 2.0, 1, 0)
-                    QBCore.Functions.Notify(k9_name .. " " .. language.enter, success, 5000)
+                    QBCore.Functions.Notify(k9_name .. " " .. language.enter, "success", 5000)
                 end
             end
         end
@@ -251,7 +251,7 @@ AddEventHandler("K9:ToggleAttack", function(target)
         end
         attacking = true
         following = false
-        QBCore.Functions.Notify(k9_name .. " " .. language.attack, error, 5000)
+        QBCore.Functions.Notify(k9_name .. " " .. language.attack, "error", 5000)
     end
 end)
 
@@ -262,52 +262,57 @@ end)
         Citizen.Trace(tostring(vehicle))
         if vehicle ~= 0 and not searching then
             local carplate = GetVehicleNumberPlateText(vehicle)
-            searching = true
-            local found_table = {}
+            if carplate ~= nil then
+                searching = true
 
-            QBCore.Functions.Notify(k9_name .. " has began searching...", primary, 5000) -- [text] = message, [type] = primary | error | success, [length] = time till fadeout.
-            
-            if openDoors then
-                SetVehicleDoorOpen(vehicle, 0, 0, 0)
-                SetVehicleDoorOpen(vehicle, 1, 0, 0)
-                SetVehicleDoorOpen(vehicle, 2, 0, 0)
-                SetVehicleDoorOpen(vehicle, 3, 0, 0)
-                SetVehicleDoorOpen(vehicle, 4, 0, 0)
-                SetVehicleDoorOpen(vehicle, 5, 0, 0)
-                SetVehicleDoorOpen(vehicle, 6, 0, 0)
-                SetVehicleDoorOpen(vehicle, 7, 0, 0)
+                QBCore.Functions.Notify(k9_name .. " has began searching...", "primary", 5000) -- [text] = message, [type] = primary | error | success, [length] = time till fadeout.
+                
+                if openDoors then
+                    SetVehicleDoorOpen(vehicle, 0, 0, 0)
+                    SetVehicleDoorOpen(vehicle, 1, 0, 0)
+                    SetVehicleDoorOpen(vehicle, 2, 0, 0)
+                    SetVehicleDoorOpen(vehicle, 3, 0, 0)
+                    SetVehicleDoorOpen(vehicle, 4, 0, 0)
+                    SetVehicleDoorOpen(vehicle, 5, 0, 0)
+                    SetVehicleDoorOpen(vehicle, 6, 0, 0)
+                    SetVehicleDoorOpen(vehicle, 7, 0, 0)
+                end
+
+                -- Back Right
+                local offsetOne = GetOffsetFromEntityInWorldCoords(vehicle, 2.0, -2.0, 0.0)
+                TaskGoToCoordAnyMeans(spawned_ped, offsetOne.x, offsetOne.y, offsetOne.z, 5.0, 0, 0, 1, 10.0)
+
+                Citizen.Wait(7000)
+
+                -- Front Right
+                local offsetTwo = GetOffsetFromEntityInWorldCoords(vehicle, 2.0, 2.0, 0.0)
+                TaskGoToCoordAnyMeans(spawned_ped, offsetTwo.x, offsetTwo.y, offsetTwo.z, 5.0, 0, 0, 1, 10.0)
+
+                Citizen.Wait(7000)
+
+                -- Front Left
+                local offsetThree = GetOffsetFromEntityInWorldCoords(vehicle, -2.0, 2.0, 0.0)
+                TaskGoToCoordAnyMeans(spawned_ped, offsetThree.x, offsetThree.y, offsetThree.z, 5.0, 0, 0, 1, 10.0)
+
+                Citizen.Wait(7000)
+
+                -- Front Right
+                local offsetFour = GetOffsetFromEntityInWorldCoords(vehicle, -2.0, -2.0, 0.0)
+                TaskGoToCoordAnyMeans(spawned_ped, offsetFour.x, offsetFour.y, offsetFour.z, 5.0, 0, 0, 1, 10.0)
+
+                Citizen.Wait(7000)
+
+                if openDoors then
+                    SetVehicleDoorsShut(vehicle, 0)
+                end
+
+                TriggerServerEvent("K9:SearchItems", carplate, k9_name)
+                searching = false
+            else
+                QBCore.Functions.Notify("There is no vehicle nearby", "error", 5000) -- [text] = message, [type] = primary | error | success, [length] = time till fadeout.
             end
-
-            -- Back Right
-            local offsetOne = GetOffsetFromEntityInWorldCoords(vehicle, 2.0, -2.0, 0.0)
-            TaskGoToCoordAnyMeans(spawned_ped, offsetOne.x, offsetOne.y, offsetOne.z, 5.0, 0, 0, 1, 10.0)
-
-            Citizen.Wait(700)
-
-            -- Front Right
-            local offsetTwo = GetOffsetFromEntityInWorldCoords(vehicle, 2.0, 2.0, 0.0)
-            TaskGoToCoordAnyMeans(spawned_ped, offsetTwo.x, offsetTwo.y, offsetTwo.z, 5.0, 0, 0, 1, 10.0)
-
-            Citizen.Wait(700)
-
-            -- Front Left
-            local offsetThree = GetOffsetFromEntityInWorldCoords(vehicle, -2.0, 2.0, 0.0)
-            TaskGoToCoordAnyMeans(spawned_ped, offsetThree.x, offsetThree.y, offsetThree.z, 5.0, 0, 0, 1, 10.0)
-
-            Citizen.Wait(700)
-
-            -- Front Right
-            local offsetFour = GetOffsetFromEntityInWorldCoords(vehicle, -2.0, -2.0, 0.0)
-            TaskGoToCoordAnyMeans(spawned_ped, offsetFour.x, offsetFour.y, offsetFour.z, 5.0, 0, 0, 1, 10.0)
-
-            Citizen.Wait(700)
-
-            if openDoors then
-                SetVehicleDoorsShut(vehicle, 0)
-            end
-
-            TriggerServerEvent("K9:SearchItems", carplate, k9_name)
-            searching = false
+        else
+            QBCore.Functions.Notify("There is no vehicle nearby", "error", 5000) -- [text] = message, [type] = primary | error | success, [length] = time till fadeout.
         end
     end)
 
