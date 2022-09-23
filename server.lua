@@ -1,3 +1,4 @@
+local QBCore = exports['qb-core']:GetCoreObject()
 RegisterServerEvent("K9:SendLanguage")
 AddEventHandler("K9:SendLanguage", function()
     local src = source
